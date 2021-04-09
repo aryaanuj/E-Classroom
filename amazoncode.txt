@@ -1,0 +1,21 @@
+{
+"Version": "2008-10-17",
+"Id": "Policy141436833278",
+"Statement" : [
+{
+
+"Sid": "Stmt1414368595009",
+"Effect": "Allow",
+"Principal": {
+"AWS" : "*"
+},
+"Action": "s3:GetObject",
+"Resource": "arn:aws:s3:::e-classroom/*",
+"Condition": {
+"StringLike": {
+"aws:Referer": "http://e-classroom.ml/*"
+}
+}
+}
+]
+} 

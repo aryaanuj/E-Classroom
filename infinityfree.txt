@@ -1,0 +1,13 @@
+infinityfree
+
+id - epiz_25448912
+password - AryaAnuj1998
+
+
+dbuser - epiz_25448912
+
+db- epiz_25448912_oes_db
+
+host - sql310.epizy.com
+
+password - AryaAnuj1998

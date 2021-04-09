@@ -1,0 +1,74 @@
+<?php
+include '../includes/uniques.php';
+include '../database/config.php';
+$myid = mysqli_real_escape_string($conn, $_POST['user']);
+
+$sql = "SELECT * FROM tbl_users WHERE user_id = '$myid' OR email = '$myid'";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+
+while($row = $result->fetch_assoc()) {
+$myuserid = $row['user_id'];
+$myemail = $row['email'];
+$myfname = $row['first_name'];
+$mylname = $row['last_name'];
+$myfullname = "$myfname $mylname";
+$new_password = get_rand_alphanumeric(10);
+$encpass = md5($new_password);
+$sql = "UPDATE tbl_users SET login='$encpass' WHERE user_id='$myuserid'";
+
+if ($conn->query($sql) === TRUE) {
+
+   
+$headers  = 'MIME-Version: 1.0' . '\r\n';
+$headers .= 'Content-type: text/html; charset=iso-8859-1' . '\r\n';
+$headers .= 'From: amitarya6666@gmail.com';
+$subject = "E-Classroom Password Reset";
+$message ="<br/><br/>";
+$message .= "Hello ".$myfullname.", we received a request for your new password for the <b>Online Examination System</b> account, therefore your password have been changed to <br><b style='font-size:20px;color:red;background-color:lightgrey;'>".$new_password."</b><br><br>";
+
+// require '../mail/PHPMailerAutoload.php';
+
+// $mail = new PHPMailer;
+                          
+
+// $mail->isSMTP();                                      
+// $mail->Host = 'smtp.gmail.com';
+// $mail->SMTPAuth = true;                               
+// $mail->Username = 'anujarya6121998@gmail.com';           
+// $mail->Password = 'arya@#1998';                         
+// $mail->SMTPSecure = 'tls';                            
+// $mail->Port = 587;                                   
+
+// $mail->setFrom('anujarya6121998@gmail.com', 'Admin');
+// $mail->addAddress($myemail , $myfullname);              
+// $mail->addReplyTo('anujarya6121998@gmail.com', 'Admin');
+   
+// $mail->isHTML(true);                                 
+
+// $mail->Subject = 'E-Classroom Password Reset';
+// $mail->Body    = $message;
+// $mail->AltBody = $message;
+
+// if(!$mail->send()) {
+if( mail($myemail, $subject, $message, $headers)){
+	echo "mail has been sent";
+} else {
+header("location:../forgot_pw.php?rp=1804");
+}
+
+
+} else {
+header("location:../forgot_pw.php?rp=1100");
+}
+
+	
+    }
+} else {
+header("location:../forgot_pw.php?rp=8924");
+}
+$conn->close();
+
+
+
